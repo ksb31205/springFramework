@@ -3,10 +3,14 @@
   - [First project for studying about servlet](#First-project-for-studying-about-servlet)
     - [IntelliJ](#IntelliJ)
     - [Eclipse](#Eclipse)
-
-  - [기본적인 서블릿 작성 방법](#기본적인-서블릿-작성-방법)
+- [기본적인 서블릿 작성 방법](#기본적인-서블릿-작성-방법)
     - [서블릿이란?](#서블릿이란?)
     - [기본적인 메서드들](#기본적인-메서드들)
+  - [서블릿 라이프사이클](#서블릿-라이프사이클)
+    - [서블릿 수행 과정](#서블릿-수행-과정)
+    - [서블릿 라이프사이클 관련 메서드들](#서블릿-라이프사이클-관련-메서드들)
+    - [service(...) 메서드의 특징](#service(...)-메서드의-특징)
+    - [요청 및 응답 정보 출력하기](#요청 및-응답-정보-출력하기)
 
 
 
@@ -89,7 +93,7 @@
 
 - ### 기본적인 메서드들
 
-    - #### doGet(...)
+    - ### doGet(...)
 
       - 요청이 들어왔을 때 일(응답)을 처리해주는 메서드. 클라이언트가 요청하면, 서버는
         - 요청을 받아내는 객체 `HttpServletRequest`와
@@ -97,7 +101,7 @@
 
     <br/>
 
-    - #### response.setContentType(…)
+    - ### response.setContentType(…)
 
       - 웹브라우저가 서버로부터 응답을 받았을 때, 응답으로 받은 데이터의 형태가 무엇인지 알려주는 메서드
 
@@ -105,13 +109,13 @@
 
     <br/>
 
-    - #### PrintWriter out = response.getWriter();
+    - ### PrintWriter out = response.getWriter();
 
       - 응답으로서 데이터를 전송해주는 통로 역할
 
     <br/>
 
-    - #### out.println(...) or out.print(...)
+    - ### out.println(...) or out.print(...)
 
       - 데이터 전송
 
@@ -128,8 +132,8 @@
   - 해당 URL로 클라이언트가 서버에게 요청
   - 서버는 해당 URL을 받아서 URL mapping 값을 확인
     - 서블릿 실행 규칙
-      - IntelliJ : http://localhost:8080/{아티펙트이름}/{URL Mapping값}
-      - Eclipse : http://localhost:8080/{프로젝트이름}/{URL Mapping값}
+      - IntelliJ : `http://localhost:8080/{아티펙트이름}/{URL Mapping값}`
+      - Eclipse : `http://localhost:8080/{프로젝트이름}/{URL Mapping값}`
     - 해당 클래스가 메모리에 존재하는지 확인
     - 메모리에 존재하지 않는다면 클래스 객체를 생성하여 메모리에 적재
       - 서블릿은 서버에 서블릿 객체를 단 한 개 만듦
@@ -139,21 +143,21 @@
 
 - ### 서블릿 라이프사이클 관련 메서드들
 
-  - ##### 생성자
+  - #### 생성자
 
     - 서블릿 객체가 메모리에 적재될 때 수행
 
-  - ##### init(…)
+  - #### init(…)
 
     - 서블릿 초기화 작업. 프로그램이 시작될 때 수행
 
-  - ##### service(…)
+  - #### service(…)
 
     - 클라이언트(웹브라우저)의 요청 처리 작업.
     - 클라이언트로부터 요청된 객체가 메모리에 있다면 수행
     - 요청이 들어왔을 때 응답해야하는 모든 내용은 이 메서드에 구현하는 것이 좋음
 
-  - ##### destroy(…)
+  - #### destroy(…)
 
     - 메모리에 적재되어 있던 서블릿 객체가 메모리에서 제거될 때 수행
     - WAS가 종료되거나, 웹페이지가 새롭게 갱신될 경우 수행
@@ -162,11 +166,67 @@
 
 - ### service(...) 메서드의 특징
 
-  - 내가 service() 메서드를 오버라이드하여 새로 작성하지 않았다면, 서블릿의 부모인 HttpServlet 클래스의 service() 메서드가 실행됨
+  - 내가 **service()** 메서드를 오버라이드하여 새로 작성하지 않았다면, 서블릿의 부모인 **HttpServlet** 클래스의 **service()** 메서드가 실행됨
 
-  - ##### HttpServlet 클래스의 service() 메서드의 구현 형식
+  - #### HttpServlet 클래스의 service() 메서드의 구현 형식
 
     - 템플릿 메서드 패턴으로 구현되어 있음
-    - 클라이언트의 요청이 GET일 경우 자신이 가지고 있는 doGet(…) 메서드를 호출
-    - 클라이언트의 요청이 POST일 경우 자신이 가지고 있는 doPost(…) 메서드를 호출
-    - 따라서 service() 메서드를 작성하지 않고 doGet(…) 또는 doPost(…)만 작성(오버라이드)하여 실행한다면, HttpServlet 클래스의 service() 메서드가 알아서 내가 작성한 doGet(…) 또는 doPost(…)를 호출하는 것
+    - 클라이언트의 요청이 **GET**일 경우 자신이 가지고 있는 **doGet(…)** 메서드를 호출
+    - 클라이언트의 요청이 **POST**일 경우 자신이 가지고 있는 **doPost(…)** 메서드를 호출
+    - 따라서 **service()** 메서드를 작성하지 않고 **doGet(…)** 또는 **doPost(…)**만 작성(오버라이드)하여 실행한다면, **HttpServlet** 클래스의 **service()** 메서드가 알아서 내가 작성한 **doGet(…)** 또는 **doPost(…)**를 호출하는 것
+
+<br/>
+
+- ### 요청 및 응답 정보 출력하기
+
+  - #### Header 정보 출력하기
+
+      - 클라이언트가 서버에게 요청할 때 함께 보내는 요청 정보 출력
+
+          ```java
+          Enumeration<String> headerNames = request.getHeaderNames();
+          
+          while(headerNames.hasMoreElements()) {
+              String headerName = headerNames.nextElement();
+              String headerValue = request.getHeader(headerName);
+              out.println(headerName + " : " + headerValue + " <br> ");
+          }
+          ```
+
+          <br/>
+
+  - #### URL 파라미터
+
+    - 형식 : `http://localhost:8080/{프로젝트이름}/{URL Mapping값}?{파라미터1}={값}&{파라미터2}={값}&...`
+
+    - ##### 요청과 함께 들어온 파라미터값 출력하기
+
+      - 아래 예시는 클라이언트가 **http://localhost:8080/firstweb/param?name=kim&age=5** 를 통해 웹페이지에 접속하였을 때 전달받는 파라미터들을 출력하는 코드
+
+          ```java
+          String name = request.getParameter("name");
+          String age = request.getParameter("age");
+          
+          PrintWriter out = response.getWriter();
+          out.println("name : " + name + "<br>");
+          out.println("age : " +age + "<br>");
+          ```
+
+      <br/>
+
+  - #### URI, URL, PATH, Remote Host 출력하기
+
+      ```java
+      String uri = request.getRequestURI();
+      StringBuffer url = request.getRequestURL();
+      String contentPath = request.getContextPath();
+      String remoteAddr = request.getRemoteAddr();
+      		
+      		
+      out.println("uri : " + uri + "<br>");
+      out.println("url : " + url + "<br>");
+      out.println("contentPath : " + contentPath + "<br>");
+      out.println("remoteAddr : " + remoteAddr + "<br>");
+      ```
+
+      
