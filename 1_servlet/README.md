@@ -10,7 +10,10 @@
     - [서블릿 수행 과정](#서블릿-수행-과정)
     - [서블릿 라이프사이클 관련 메서드들](#서블릿-라이프사이클-관련-메서드들)
     - [service(...) 메서드의 특징](#service(...)-메서드의-특징)
-    - [요청 및 응답 정보 출력하기](#요청 및-응답-정보-출력하기)
+  - [요청 및 응답 정보 출력하기](#요청-및-응답-정보-출력하기)
+    - [Header 정보 출력하기](#Header-정보-출력하기)
+    - [URL 파라미터 출력하기](#URL-파라미터-출력하기)
+    - [URI, URL, PATH, Remote Host 출력하기](#URI,-URL,-PATH,-Remote Host-출력하기)
 
 
 
@@ -177,29 +180,29 @@
 
 <br/>
 
-- ### 요청 및 응답 정보 출력하기
+- # 요청 및 응답 정보 출력하기
 
-  - #### Header 정보 출력하기
+- ### Header 정보 출력하기
 
-      - 클라이언트가 서버에게 요청할 때 함께 보내는 요청 정보 출력
-
-          ```java
-          Enumeration<String> headerNames = request.getHeaderNames();
-          
-          while(headerNames.hasMoreElements()) {
-              String headerName = headerNames.nextElement();
-              String headerValue = request.getHeader(headerName);
-              out.println(headerName + " : " + headerValue + " <br> ");
-          }
-          ```
-
+    - 클라이언트가 서버에게 요청할 때 함께 보내는 요청 정보 출력
+      
+        ```java
+        Enumeration<String> headerNames = request.getHeaderNames();
+        
+        while(headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            out.println(headerName + " : " + headerValue + " <br> ");
+        }
+        ```
+        
           <br/>
 
-  - #### URL 파라미터
+- ### URL 파라미터 출력하기
 
     - 형식 : `http://localhost:8080/{프로젝트이름}/{URL Mapping값}?{파라미터1}={값}&{파라미터2}={값}&...`
 
-    - ##### 요청과 함께 들어온 파라미터값 출력하기
+    - #### 요청과 함께 들어온 파라미터값 출력하기
 
       - 아래 예시는 클라이언트가 **http://localhost:8080/firstweb/param?name=kim&age=5** 를 통해 웹페이지에 접속하였을 때 전달받는 파라미터들을 출력하는 코드
 
@@ -214,19 +217,18 @@
 
       <br/>
 
-  - #### URI, URL, PATH, Remote Host 출력하기
+- ### URI, URL, PATH, Remote Host 출력하기
 
-      ```java
-      String uri = request.getRequestURI();
-      StringBuffer url = request.getRequestURL();
-      String contentPath = request.getContextPath();
-      String remoteAddr = request.getRemoteAddr();
-      		
-      		
-      out.println("uri : " + uri + "<br>");
-      out.println("url : " + url + "<br>");
-      out.println("contentPath : " + contentPath + "<br>");
-      out.println("remoteAddr : " + remoteAddr + "<br>");
-      ```
-
-      
+  ~~~java
+  ```java
+  String uri = request.getRequestURI();
+  StringBuffer url = request.getRequestURL();
+  String contentPath = request.getContextPath();
+  String remoteAddr = request.getRemoteAddr();
+  
+  out.println("uri : " + uri + "<br>");
+  out.println("url : " + url + "<br>");
+  out.println("contentPath : " + contentPath + "<br>");
+  out.println("remoteAddr : " + remoteAddr + "<br>");
+  ```    
+  ~~~
