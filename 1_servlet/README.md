@@ -13,7 +13,7 @@
   - [요청 및 응답 정보 출력하기](#요청-및-응답-정보-출력하기)
     - [Header 정보 출력하기](#Header-정보-출력하기)
     - [URL 파라미터 출력하기](#URL-파라미터-출력하기)
-    - [URI, URL, PATH, Remote Host 출력하기](#URI,-URL,-PATH,-Remote Host-출력하기)
+    - [URI, URL, PATH, Remote Host 출력하기](#URI,-URL,-PATH,-Remote-Host-출력하기)
 
 <br/>
 
