@@ -1,8 +1,9 @@
-- # Table of contents
+# Table of contents
 
-  - [First project for studying about servlet](#First-project-for-studying-about-servlet)
-    - [IntelliJ](#IntelliJ)
-    - [Eclipse](#Eclipse)
+- [First project for studying about servlet](#First-project-for-studying-about-servlet)
+  - [IntelliJ](#IntelliJ)
+  - [Eclipse](#Eclipse)
+
 - [기본적인 서블릿 작성 방법](#기본적인-서블릿-작성-방법)
     - [서블릿이란?](#서블릿이란?)
     - [기본적인 메서드들](#기본적인-메서드들)
@@ -16,6 +17,10 @@
     - [URI, URL, PATH, Remote Host 출력하기](#URI,-URL,-PATH,-Remote-Host-출력하기)
 
 <br/>
+
+---
+
+
 
 # First project for studying about servlet
 
@@ -85,7 +90,11 @@
 
 <br/>
 
-- # 기본적인 서블릿 작성 방법
+---
+
+
+
+# 기본적인 서블릿 작성 방법
 
 - ### 서블릿이란?
 
@@ -124,7 +133,7 @@
 
 <br/>
 
-- # 서블릿 라이프사이클
+# 서블릿 라이프사이클
 
 ![image](https://user-images.githubusercontent.com/70624367/92199728-ea41ed80-eeb2-11ea-97b1-5e67ae78db81.png)
 
@@ -180,7 +189,11 @@
 
 <br/>
 
-- # 요청 및 응답 정보 출력하기
+---
+
+
+
+# 요청 및 응답 정보 출력하기
 
 - ### Header 정보 출력하기
 
