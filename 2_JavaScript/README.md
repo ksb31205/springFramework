@@ -187,6 +187,7 @@
     ![img](https://mdn.mozillademos.org/files/8633/promises.png)
   
   - 강의 링크
+    
     - https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
 
 <br/>
@@ -314,6 +315,13 @@
     - #### 콜백 함수를 쓰는 이유
 
       - 함수의 과정이 끝나기 전에 다음 프로세스를 진행해야 하는 경우가 있을 때, 해당 함수의 과정이 끝날 때까지 모든 작업이 멈춰버리는 현상이 발생할 수 있기 때문
+      
+        <br/>
+    
+    - #### 기본적인 콜백 함수들
+    
+      - setInterval : 특정 동작을 반복적으로 수행하기 위해 쓰임
+      - setTimeout : 특정 동작을 다른 동작이 끝난 후 처리하기 위해 쓰임
 
 <br/>
 
@@ -474,3 +482,226 @@
   - 브라우저 새로고침 없이 서버로부터 데이터를 받아와 보여주는 기술
   - 브라우저가 가지고 있는 XMLHttpRequest 객체를 이용해서 전체 페이지를 새로 고치지 않고도 페이지의 일부만을 위한 데이터를 로드하는 기법
   - 원래는 웹페이지의 일부 내용을 갱신하기 위해서라도 페이지 전체를 갱신해야 했는데, ajax를 사용하면 JSON이나 XML의 형태로 필요한 데이터만 받아 갱신하기 때문에 그만큼 자원과 시간을 아낄 수 있음
+
+  #### ※ 기본 실행 코드
+
+  ```javascript
+  function ajax(data) {
+   var oReq = new XMLHttpRequest();
+   oReq.addEventListener("load", function() {
+     console.log(this.responseText);
+   });    
+   oReq.open("GET", "http://www.example.org/getData?data=data"); //parameter를 붙여서 보낼수있음. 
+   oReq.send();
+  }
+  ```
+
+  <br/>
+
+
+
+# JSP(Java Server Page)
+
+- ### JSP란?
+
+  - 동적 웹페이지를 만드는데 사용되는 자바의 표준 웹프로그래밍 기술
+
+  - 겉보기에는 HTML 문서와 비슷하나, 내부적인 실행은 Servlet으로 변환되어 돌아감
+
+  - HTML 문서 안에 자바 코드가 삽입되는 구조
+
+    <br/>
+
+  #### ※ 예제 코드
+
+  - JSP 예제
+
+      ```jsp
+      <%@ page language="java" contentType="text/html; charset=UTF-8"
+          pageEncoding="UTF-8"%>
+      <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+      <html>
+      <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>sum10</title>
+      </head>
+      <body>
+
+      <% 
+          int total = 0;
+          for(int i = 1; i <= 10; i++){
+              total = total + i;
+          }
+      %>
+
+      1부터 10까지의 합 : <%=total %>
+
+      </body>
+      </html>
+      ```
+  - JSP가 Servlet으로 변환된 것
+  
+    ```java
+    ​```java
+        public void _jspInit() {
+        }
+    
+          public void _jspDestroy() {
+        }
+    
+          public void _jspService(final javax.servlet.http.HttpServletRequest request, final javax.servlet.http.HttpServletResponse response)
+            throws java.io.IOException, javax.servlet.ServletException {
+    
+          .....
+    
+            try {
+            .....
+    
+              out.write("\n");
+              out.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
+              out.write("<html>\n");
+              out.write("<head>\n");
+              out.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+              out.write("<title>sum10</title>\n");
+              out.write("</head>\n");
+              out.write("<body>\n");
+            out.write("\n");
+    
+          int total = 0;
+          for(int i = 1; i <= 10; i++){
+              total = total + i;
+        }
+    
+              out.write("\n");
+              out.write("\n");
+              out.write("1부터 10까지의 합 : ");
+              out.print(total );
+              out.write("\n");
+              out.write("\n");
+              out.write("</body>\n");
+              out.write("</html>");
+            } catch (java.lang.Throwable t) {
+              .....
+              }
+            } finally {
+              _jspxFactory.releasePageContext(_jspx_page_context);
+            }
+          }
+    ```
+  
+  <br/>
+  
+- ### JSP 실행 순서
+
+  - 브라우저가 웹서버에 JSP에 대한 요청 정보를 전달한다.
+
+  - 브라우저가 요청한 JSP가 최초로 요청했을 경우만
+
+    - JSP로 작성된 코드가 서블릿으로 코드로 변환한다. (java 파일 생성)
+    - 서블릿 코드를 컴파일해서 실행가능한 bytecode로 변환한다. (class 파일 생성)
+    - 서블릿 클래스를 로딩하고 인스턴스를 생성한다.
+
+  - 서블릿이 실행되어 요청을 처리하고 응답 정보를 생성한다.
+
+    <br/>
+
+  ##### ※ JSP Lifecycle 예제
+
+  ```jsp
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8"%>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  <html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+  hello
+  <%
+  	System.out.println("_jspService()");
+  %>
+  
+  <%!
+  public void jspInit() {
+  	System.out.println("jspInit()!");
+  }
+  
+  public void jspDestroy() {
+  	System.out.println("jspDestroy()");
+  }
+  %>
+  
+  </body>
+  </html>
+  ```
+
+  <br/>
+
+- ### JSP 기초 문법
+
+  - #### JSP 전용 태그
+
+    - 서블릿 생성 시 특정 자바 코드로 바뀌는 태그
+
+      |    명칭    |                     문법                     |                          설명                          |
+      | :--------: | :------------------------------------------: | :----------------------------------------------------: |
+      | 스크립트릿 |                   <%    %>                   |                    자바 코드를 기술                    |
+      | 익스프레션 |                  <%=    %>                   | 변수 또는 메소드의 결과값 등 화면에 출력할 내용을 기술 |
+      |   지시자   | <%@ [지시자] [속성]="값" [속성]="값" ...  %> | 웹컨테이너가 JSP 페이지를 처리할 때 필요한 정보를 기술 |
+      |   선언부   |                   <%!   %>                   |                  변수나 메서드를 선언                  |
+      |    주석    |                 <%--   --%>                  |                          주석                          |
+
+      <br/>
+
+    - ##### 주석의 영향 및 범위
+
+      - JSP 주석 : Servlet으로 변환 시 사라짐
+      - JAVA 주석 : Servlet으로 변환 시 유지, 이 Servlet이 HTML로 변환 시 사라짐
+
+      <br/>
+
+    - ##### 지시자의 종류
+
+      - page : JSP 페이지와 관련된 속성을 정의할 때 사용
+
+        ```jsp
+        <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+        ```
+
+        ```java
+        response.setContentType("text/html;charset=UTF-8") // 위 JSP 코드가 이렇게 변환됨
+        ```
+
+      - include : 주어진 파일을 현재 페이지에 삽입하고자 할 때 사용
+
+        ```jsp
+        <%@ include file="file_url"%>
+        ```
+
+      - taglib : 태그 라이브러리를 선언할 때 사용
+
+        ```jsp
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        ```
+
+      <br/>
+
+  - ### JSP 내장 객체
+
+    - JSP가 Servlet으로 변환될 때 자동으로 추가되는 Java 객체로써, JSP 프로그래밍을 좀 더 편하게 해주는 용도로 사용됨
+
+      | 내장 객체   | 자바 클래스                            | 주요 역할                                                    |
+      | ----------- | -------------------------------------- | ------------------------------------------------------------ |
+      | request     | javax.servlet.http.HttpServletRequest  | HTML Form 요소 선택 값과 같은 사용자 입력 정보를 읽어올 때 사용 |
+      | response    | javax.servlet.http.HttlServletResponse | 사용자 요청에 대한 응답을 처리할 때 사용                     |
+      | pageContext | javax.servlet.jsp.PageContext          | 현재 JSP 실행에 대한 context 정보를 참조하기 위해 사용       |
+      | session     | javax.servlet.http.HttpSession         | 클라이언트 세션 정보를 처리하기 위해 사용                    |
+      | application | javax.servlet.ServletContext           | 웹서버의 애플리케이션 처리와 관련된 정보를 참조하기 위해 사용 |
+      | out         | javax.servlet.jsp.JspWriter            | 사용자에게 전달하기 위한 output 스트림을 처리하기 위해 사용  |
+      | config      | javax.servlet.ServletConfig            | 현재 JSP에 대한 초기화 환경을 처리하기 위해 사용             |
+      | page        | javax.servlet.Http.JspPage             | 현재 JSP 페이지에 대한 클래스 정보                           |
+      | exception   | javax.lang.Throwable                   | 예외 처리를 위해 사용                                        |
+
+      
+
