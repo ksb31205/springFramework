@@ -703,5 +703,210 @@
       | page        | javax.servlet.Http.JspPage             | 현재 JSP 페이지에 대한 클래스 정보                           |
       | exception   | javax.lang.Throwable                   | 예외 처리를 위해 사용                                        |
 
-      
+      <br/>
+
+  - ### 리다이렉트(Redirect)
+
+    - HTTP 프로토콜로 정해진 규칙
+
+    - 서버가 클라이언트로부터 요청을 받았을 때, 클라이언트에게 특정 URL로 이동하라고 요청하는 것
+
+    - 작동 순서
+
+      - 서버는 클라이언트에게 HTTP 상태코드 302로 응답하는데 이때 헤더 내 Location 값에 이동할 URL을 추가함
+      - 클라이언트는 리다이렉션 응답을 받게 되면 헤더(Location)에 포함된 URL로 재요청을 보냄
+      - 이때 브라우저의 주소창은 새 URL로 바뀜
+
+    - 서블릿이나 JSP는 리다이렉트하기 위해 HttpServletResponse 클래스의 sendRedirect() 메소드를 사용함
+
+      <br/>
+
+    ※ 예제
+
+    - redirect01.jsp, redirect02.jsp 파일을 작성
+
+    - 웹 브라우저가 redirect01.jsp을 요청 (즉, `localhostl:8080/.../.../redirect01.jsp` 로 접속)
+
+    - redirect01은 redirect02.jsp로 리다이렉팅하는 로직이 실행되도록 함
+
+      ```jsp
+      <!-- redirect01.jsp -->
+      <%@ page language="java" contentType="text/html; charset=UTF-8"
+          pageEncoding="UTF-8"%>
+      <%
+          response.sendRedirect("redirect02.jsp");
+      %>
+      ```
+
+      ```jsp
+      <!-- redirect02.jsp -->
+      <%@ page language="java" contentType="text/html; charset=UTF-8"
+          pageEncoding="UTF-8"%>
+      <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+      <html>
+      <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Insert title here</title>
+      </head>
+      <body>
+      redirect된 페이지 입니다.
+      </body>
+      </html>
+      ```
+
+  <br/>
+
+  - ### 포워드(Forward)
+
+    - 클라이언트가 Servlet1로 어떤 요청을 보냈을 때, Servlet1이 그 요청의 일부분만 처리 한 후 남은 요청을 Servlet2로 넘겨주는 것
+
+    - Servlet2는 이 나머지를 마저 처리한 다음에 응답을 만들어서 클라이언트한테 보냄
+
+      <br/>
+
+    - ##### 작동 순서
+
+      - 웹 브라우저에서 Servlet1에게 요청을 보냄
+
+      - Servlet1은 요청을 처리한 후, 그 결과를 HttpServletRequest에 저장
+
+      - Servlet1은 결과가 저장된 HttpServletRequest와 응답을 위한 HttpServletResponse를 같은 웹 어플리케이션 안에 있는 Servlet2에게 전송(forward)
+
+      - Servlet2는 Servlet1으로 부터 받은 HttpServletRequest와 HttpServletResponse를 이용하여 요청을 처리한 후 웹 브라우저에게 결과를 전송
+
+        <br/>
+
+    - ##### 포워드와 리다이렉트의 차이점
+
+      ![image](https://user-images.githubusercontent.com/53200166/94514812-20c61a80-025d-11eb-88fa-cdd77921502e.png)
+
+      - 포워드
+        - Servlet1는 클라이언트의 요청을 일부 수행한 후 Servlet2에 남은 요청을 넘겨줌
+        - 모든 작업이 끝난 후 클라이언트가 앞으로 요청할 곳은 Servlet1, 즉 **URL이 바뀌지 않음**
+        - 클라이언트이 **요청이 단 한 번** (redirect01.jsp 요청) 이므로 `request` 객체와 `response` 객체는 한 번 만들어짐
+
+      ![image](https://user-images.githubusercontent.com/53200166/94514824-258ace80-025d-11eb-913a-f83a554fa29d.png)
+
+      - 리다이렉트
+
+        - Servlet1은 해당 요청을 모두 수행한 후 앞으로는 Servlet2로 요청하라고 알려줌
+
+        - 모든 작업이 끝난 후 클라이언트가 앞으로 요청할 곳은 Servlet2, 즉 **URL이 바뀜**
+
+        - 클라이언트의 **요청이 두 번** 이므로 (redirect01.jsp 요청 -> redirect02.jsp 요청)  `request` 객체와 `response` 객체는 두 번 만들어짐
+
+          <br/>
+
+      ※ 예시
+
+      - 포워드
+        - 고객이 고객센터로 상담원에게 123번으로 전화를 건다.
+        - 상담원은 해당 문의사항에 대해 잘 알지 못해서 옆의 다른 상담원에게 해당 문의사항에 대해 답을 얻는다.
+        - 상담원은 고객에게 문의사항을 처리해준다.
+      - 리다이렉트
+        - 고객이 고객센터로 상담원에게 123번으로 전화를 건다.
+        - 상담원은 고객에게 다음과 같이 이야기한다. "고객님 해당 문의사항은 124번으로 다시 문의 해주시겠어요?"
+        - 고객은 다시 124번으로 문의해서 일을 처리한다.
+
+    <br/>
+
+    ※ 예제
+
+    ```java
+    // FrontServlet.java
+    
+    package examples;
+    
+    import java.io.IOException;
+    
+    import javax.servlet.RequestDispatcher;
+    import javax.servlet.ServletException;
+    import javax.servlet.annotation.WebServlet;
+    import javax.servlet.http.HttpServlet;
+    import javax.servlet.http.HttpServletRequest;
+    import javax.servlet.http.HttpServletResponse;
+    
+    /**
+     * Servlet implementation class FrontServlet
+     */
+    @WebServlet("/front")
+    public class FrontServlet extends HttpServlet {
+        private static final long serialVersionUID = 1L;
+           
+        /**
+         * @see HttpServlet#HttpServlet()
+         */
+        public FrontServlet() {
+            super();
+            // TODO Auto-generated constructor stub
+        }
+    
+        /**
+         * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+         */
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                
+                int diceValue = (int)(Math.random() * 6) + 1; 
+                request.setAttribute("dice", diceValue);
+                
+                RequestDispatcher requestDispatehcer = request.getRequestDispatcher("/next");
+                requestDispatehcer.forward(request, response);
+        }
+    
+    }
+    ```
+
+    ```java
+    // NextServlet.java
+    
+    package examples;
+    
+    import java.io.IOException;
+    import java.io.PrintWriter;
+    import java.util.Enumeration;
+    
+    import javax.servlet.ServletException;
+    import javax.servlet.annotation.WebServlet;
+    import javax.servlet.http.HttpServlet;
+    import javax.servlet.http.HttpServletRequest;
+    import javax.servlet.http.HttpServletResponse;
+    
+    /**
+     * Servlet implementation class ForwardServlet
+     */
+    @WebServlet("/forward")
+    public class ForwardServlet extends HttpServlet {
+        private static final long serialVersionUID = 1L;
+           
+        /**
+         * @see HttpServlet#HttpServlet()
+         */
+        public ForwardServlet() {
+            super();
+            // TODO Auto-generated constructor stub
+        }
+    
+        /**
+         * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+         */
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<html>");
+            out.println("<head><title>form</title></head>");
+            out.println("<body>");
+    
+            int dice = (Integer)request.getAttribute("dice");
+            out.println("dice : " + dice);
+            for(int i = 0; i < dice; i++) {
+                out.print("<br>hello");
+            }
+            out.println("</body>");
+            out.println("</html>");
+        }
+    
+    }
+    ```
+
+    
 
